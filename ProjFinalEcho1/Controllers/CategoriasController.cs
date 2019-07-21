@@ -14,7 +14,7 @@ namespace ProjFinalEcho1.Controllers
     public class CategoriasController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        [Authorize(Roles = "RecursosHumanos")]
+        [Authorize(Roles = "Admin")]
         // GET: Categorias
         public ActionResult Index()
         {
@@ -22,6 +22,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Categorias/Details/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +38,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Categorias/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -47,6 +49,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "ID,Nome,Descricao")] Categorias categorias)
         {
             if (ModelState.IsValid)
@@ -60,6 +63,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Categorias/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -79,6 +83,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "ID,Nome,Descricao")] Categorias categorias)
         {
             if (ModelState.IsValid)
@@ -91,6 +96,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Categorias/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -106,6 +112,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // POST: Categorias/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

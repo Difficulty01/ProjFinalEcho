@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using ProjFinalEcho1.Models;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,7 +14,15 @@ namespace ProjFinalEcho1.Controllers
     {
         public ActionResult Index()
         {
+            /*using (var ctx = new DefaultConnection())
+            {
+                var student = (from s in ctx.Students
+                               where s.StudentName == "Bill"
+                               select s).FirstOrDefault<Student>();
+            }*/
+
             return View();
+            
         }
 
         public ActionResult About()

@@ -16,8 +16,6 @@ namespace ProjFinal_alpha.Models
 
         public string Nome { get; set; }
 
-        public string Descricao { get; set; }
-
         //lista de CatPost
         public virtual ICollection<CatPosts> CatPost { get; set; }
 
