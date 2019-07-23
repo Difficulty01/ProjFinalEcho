@@ -7,7 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProjFinalEcho1.Models;
-using ProjFinal_alpha.Models;
+using System.IO;
 
 namespace ProjFinalEcho1.Controllers
 {
@@ -18,7 +18,20 @@ namespace ProjFinalEcho1.Controllers
         // GET: Posts
         public ActionResult Index()
         {
+            ViewBag.categorias = db.Categorias.ToList();
             return View(db.Posts.ToList());
+        }
+
+        // GET: Posts/Search/5
+        public ActionResult Search(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            ViewBag.Posts = db.Posts.Where(c => c.CategoriasId == id).ToList();
+            ViewBag.categorias = db.Categorias.ToList();
+            return View();
         }
 
         // GET: Posts/Details/5
@@ -33,6 +46,7 @@ namespace ProjFinalEcho1.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.comments = db.Comentarios.Where(c => c.PostId == id).ToList();
             return View(posts);
         }
 
@@ -47,17 +61,91 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts)
+        public ActionResult Create([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts, HttpPostedFileBase Imagem)
         {
-            if (ModelState.IsValid)
+
+            // vars auxiliares
+            string caminho = "";
+            bool imagemValida = false;
+            //posts.id = 0;
+            /// foi fornecido um ficheiro?
+            if (Imagem == null)
             {
-                db.Posts.Add(posts);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                // a foto não existe
+                // vou atribuir uma fotografia por defeito
+                posts.Imagem = "nouser.jpg";
+            }
+            else
+            {
+                // existe ficheiro
+                /// é uma imagem (fotografia)?
+                // aceitamos JPEG e PNG
+                if (Imagem.ContentType == "image/jpeg" ||
+                   Imagem.ContentType == "image/png")
+                {
+                    // estamos perante uma Foto válida
+                    /// se é fotografia, 
+                    ///     guardar a imagem e 
+                    ///       - definir um nome
+                    Guid g;
+                    g = Guid.NewGuid();
+                    string extensaoDoFicheiro = Path.
+                                                GetExtension(Imagem.FileName).
+                                                ToLower();
+                    string nomeFicheiro = g.ToString() + extensaoDoFicheiro;
+
+                    ///       - definir um local onde a guardar
+                    caminho = Path.Combine(Server.MapPath("~/Imagens/"), nomeFicheiro);
+
+                    ///     associar ao agente
+                    posts.Imagem = nomeFicheiro;
+
+                    // marca o ficheiro como válido
+                    imagemValida = true;
+                }
+                else
+                {
+                    /// se não é um ficheiro do tipo imagem (JPEG ou PNG), 
+                    ///     atribuir ao agente uma 'imagem por defeito'
+                    posts.Imagem = "nouser.jpg";
+                }
             }
 
+            // avalia se os dados fornecidos estão de acordo com o modelo
+            if (ModelState.IsValid)
+            {
+                // adicionar os dados do novo Agente ao Modelo
+                db.Posts.Add(posts);
+                try
+                {
+                    // guardar os dados na BD
+                    db.SaveChanges();
+                    // guardar a imagem no disco rígido do servidor
+                    if (imagemValida) Imagem.SaveAs(caminho);
+                    // redirecionar o utilizador para a página de INDEX
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Ocorreu um erro desconhecido. " +
+                                                 "Pedimos deculpa pela ocorrência.");
+                }
+            }
+            // se cheguei aqui é pq alguma coisa correu mal...
             return View(posts);
         }
+
+
+
+        /* if (ModelState.IsValid)
+         {
+             db.Posts.Add(posts);
+             db.SaveChanges();
+             return RedirectToAction("Index");
+         }
+
+         return View(posts);*/
+    //}
 
         // GET: Posts/Edit/5
         public ActionResult Edit(int? id)

@@ -1,21 +1,13 @@
-﻿@model IEnumerable<ProjFinalEcho1.Models.Posts>
+﻿@model ProjFinalEcho1.Models.Posts
 
 @{
-    //Layout = null;
+    ViewBag.Title = "Search";
 }
 
-<!DOCTYPE html>
+<h2>Search</h2>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-
+<div>
+    <h4>Posts</h4>
     <table>
         @foreach (var item in ViewBag.categorias)
         {
@@ -25,8 +17,8 @@
                 </td>
             </tr>
         }
-    </table>
-
+        </table>
+    <hr />
     <table class="table">
         <tr>
             <th>
@@ -38,14 +30,14 @@
             <th></th>
         </tr>
 
-        @foreach (var item in Model)
+        @foreach (var item in ViewBag.Posts)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Titulo)
+                    @item.Titulo
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Hidden)
+                    @item.Hidden
                 </td>
                 <td>
                     @* Apresentar a imagem de um post *@
@@ -56,14 +48,8 @@
 
                     @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
                 </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-                </td>
             </tr>
         }
 
     </table>
-</body>
-</html>
+</div>

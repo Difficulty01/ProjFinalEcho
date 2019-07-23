@@ -10,19 +10,20 @@ namespace ProjFinalEcho1.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index","Posts");
+            //return View();index
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "As suas noticias em primeira mão.";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Como nos contactar.";
 
             return View();
         }

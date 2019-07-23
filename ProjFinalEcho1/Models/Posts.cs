@@ -1,19 +1,18 @@
 ﻿using ProjFinalEcho1.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace ProjFinal_alpha.Models
+namespace ProjFinalEcho1.Models
 {
     public class Posts
     {
 
         public Posts()
         {
-            CatPost = new HashSet<CatPosts>();
+           
             Votes = new HashSet<Votes>();
             Comentarios = new HashSet<Comentarios>();
         }
@@ -24,16 +23,20 @@ namespace ProjFinal_alpha.Models
 
         public string Conteudo { get; set; }
 
+        public string Imagem { get; set; }
+
         public Boolean Hidden { get; set; }
 
         public Boolean Deleted { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
-        //lista de CatPost
-        public virtual ICollection<CatPosts> CatPost { get; set; }
+        /*[ForeignKey("Utilizadores")]
+        public int UtilizadoresId { get; set; }
+        public Utilizadores utilizadores { get; set; }*/
+
+        [ForeignKey("Categorias")]
+        public int CategoriasId { get; set; }
+        public Categorias Categorias { get; set; }
+        
         //lista de votos
         public virtual ICollection<Votes> Votes { get; set; }
         //lista de comentários

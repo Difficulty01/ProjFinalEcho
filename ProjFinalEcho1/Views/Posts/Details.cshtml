@@ -1,7 +1,7 @@
-﻿@model ProjFinal_alpha.Models.Posts
+﻿@model ProjFinalEcho1.Models.Posts
 
 @{
-    Layout = null;
+    //Layout = null;
 }
 
 <!DOCTYPE html>
@@ -9,50 +9,45 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
     <title>Details</title>
 </head>
 <body>
     <div>
-        <h4>Posts</h4>
+        <h4>@Html.DisplayFor(model => model.Titulo)</h4>
         <hr />
         <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </dt>
-    
+
+
             <dd>
-                @Html.DisplayFor(model => model.Titulo)
+                <img src="~/Imagens/@Html.DisplayFor(model => model.Imagem)"
+                     alt="Fotografia do agente @Html.DisplayFor(model => model.Titulo)"
+                     title="@Html.DisplayFor(model => model.Titulo)"
+                     width="150" />
             </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Conteudo)
-            </dt>
-    
+
+
             <dd>
                 @Html.DisplayFor(model => model.Conteudo)
             </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Hidden)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Hidden)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Deleted)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Deleted)
-            </dd>
-    
+
         </dl>
     </div>
     <p>
         @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
         @Html.ActionLink("Back to List", "Index")
     </p>
+    <table class="pure-table pure-table-bordered">
+        @foreach (var coments in ViewBag.comments)
+        {
+         <tr>
+                <td>@coments.Coment</td>
+                <td>@coments.DataDoComentario</td>
+                <td></td>
+        </tr>
+        }
+       
+
+    </table>
 </body>
 </html>

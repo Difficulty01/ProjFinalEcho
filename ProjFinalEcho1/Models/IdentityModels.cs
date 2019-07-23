@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using ProjFinal_alpha.Models;
 
 namespace ProjFinalEcho1.Models
 {
@@ -35,6 +34,7 @@ namespace ProjFinalEcho1.Models
         public virtual DbSet<Comentarios> Comentarios { get; set; } // tabela Comentarios
         public virtual DbSet<Votes> Votes { get; set; } // tabela Votes
         public virtual DbSet<Categorias> Categorias { get; set; } // tabela Categorias
-        public virtual DbSet<CatPosts> CatPosts { get; set; } // tabela CatPost
+        
+        public virtual DbSet<Utilizadores> Utilizadores { get; set; } // tabela Utilizadores
     }
 }

@@ -7,15 +7,14 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProjFinalEcho1.Models;
-using ProjFinal_alpha.Models;
 
 namespace ProjFinalEcho1.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriasController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        [Authorize(Roles = "RecursosHumanos")]
-        // GET: Categorias
+       // GET: Categorias
         public ActionResult Index()
         {
             return View(db.Categorias.ToList());

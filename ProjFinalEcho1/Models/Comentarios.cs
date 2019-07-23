@@ -1,12 +1,11 @@
 ﻿using ProjFinalEcho1.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace ProjFinal_alpha.Models
+namespace ProjFinalEcho1.Models
 {
     public class Comentarios
     {
@@ -14,12 +13,11 @@ namespace ProjFinal_alpha.Models
         
         public string Coment { get; set; }
 
-        //data
+        public DateTime DataDoComentario{ get; set; }
 
-        [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        /*[ForeignKey("Utilizadores")]
+        public int UtilizadoresId { get; set; }
+        public Utilizadores utilizadores { get; set; }*/
 
         [ForeignKey("Post")]
         public int PostId { get; set; }

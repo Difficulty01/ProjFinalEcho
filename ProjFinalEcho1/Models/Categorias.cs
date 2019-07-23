@@ -4,22 +4,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace ProjFinal_alpha.Models
+namespace ProjFinalEcho1.Models
 {
     public class Categorias
     {
         public Categorias()
         {
-            CatPost = new HashSet<CatPosts>();
+            Post = new HashSet<Posts>();
         }
         public int ID { get; set; }
 
         public string Nome { get; set; }
 
-        public string Descricao { get; set; }
+        //public string Descricao { get; set; }
 
         //lista de CatPost
-        public virtual ICollection<CatPosts> CatPost { get; set; }
+        public virtual ICollection<Posts> Post { get; set; }
 
     }
 }
