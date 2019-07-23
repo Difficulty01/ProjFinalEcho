@@ -16,9 +16,6 @@ namespace ProjFinalEcho1
             iniciaAplicacao();
         }
 
-
-
-
         private void iniciaAplicacao()
         {
 

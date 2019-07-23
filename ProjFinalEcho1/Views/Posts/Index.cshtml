@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProjFinalEcho1.Models.Posts>
 
 @{
-    //Layout = null;
+//Layout = null;
 }
 
 <!DOCTYPE html>
@@ -12,73 +12,76 @@
     <title>Index</title>
 </head>
 <body>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
+    @if (User.IsInRole("administrador"))
+    {
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+    }
 
-    <table>
-        @foreach (var item in ViewBag.categorias)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink((String)item.Nome, "Search", new { id = item.ID })
-                </td>
-            </tr>
-        }
-    </table>
-
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-
-            @if (User.IsInRole("administrador"))
+        <table>
+            @foreach (var item in ViewBag.categorias)
             {
-                <th>
-                    @Html.DisplayNameFor(model => model.Hidden)
-                </th>
+                <tr>
+                    <td>
+                        @Html.ActionLink((String)item.Nome, "Search", new { id = item.ID })
+                    </td>
+                </tr>
             }
+        </table>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+
+                @if (User.IsInRole("administrador"))
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.Hidden)
+                    </th>
+                }
                 <th></th>
             </tr>
 
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-
-            @if (User.IsInRole("administrador"))
+            @foreach (var item in Model)
             {
-                <td>
-                    @Html.DisplayFor(modelItem => item.Hidden)
-                </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+
+                    @if (User.IsInRole("administrador"))
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Hidden)
+                        </td>
+                    }
+                    <td>
+                        @* Apresentar a imagem de um post *@
+                        <img src="~/Imagens/@item.Imagem"
+                             alt="imagem do agente @item.Titulo"
+                             title="@item.Titulo"
+                             width="50" />
+
+                        @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
+                    </td>
+                    <td>
+                        @if (User.IsInRole("administrador"))
+                        {
+                            @Html.ActionLink("Editar", "Edit", new { id = item.ID });
+                        }
+                        @Html.ActionLink("Detalhes", "Details", new { id = item.ID })
+
+                        @if (User.IsInRole("administrador"))
+                        {
+                            @Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
+                        }
+                    </td>
+                </tr>
             }
-                <td>
-                    @* Apresentar a imagem de um post *@
-                    <img src="~/Imagens/@item.Imagem"
-                         alt="imagem do agente @item.Titulo"
-                         title="@item.Titulo"
-                         width="50" />
 
-                    @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
-                </td>
-                <td>
-                    @if (User.IsInRole("administrador"))
-                    {
-                        @Html.ActionLink("Editar", "Edit", new { id = item.ID });
-                    }
-                    @Html.ActionLink("Detalhes", "Details", new { id = item.ID })
-
-                    @if (User.IsInRole("administrador"))
-                    {
-                        @Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
-                    }
-                </td>
-            </tr>
-        }
-
-    </table>
-</body>
+        </table>
+    </body>
 </html>

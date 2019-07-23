@@ -1,6 +1,7 @@
 ﻿using ProjFinalEcho1.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
@@ -19,12 +20,12 @@ namespace ProjFinalEcho1.Models
 
         public int ID { get; set; }
 
+        [Required(ErrorMessage = "o Titulo é de preenchimento obrigatório.")]
         public string Titulo { get; set; }
-
+        [Required(ErrorMessage = "o Conteudo é de preenchimento obrigatório.")]
         public string Conteudo { get; set; }
-
+        [Required(ErrorMessage = "A imagem é de preenchimento obrigatório.")]
         public string Imagem { get; set; }
-
         public Boolean Hidden { get; set; }
 
         public Boolean Deleted { get; set; }

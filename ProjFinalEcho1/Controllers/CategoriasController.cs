@@ -23,6 +23,8 @@ namespace ProjFinalEcho1.Controllers
         // GET: Categorias/Create
         public ActionResult Create()
         {
+            Session["IdPost"] = -1;
+            Session["acao"] = "Categorias/Create";
             return View();
         }
 
@@ -33,6 +35,8 @@ namespace ProjFinalEcho1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Nome")] Categorias categorias)
         {
+            if ((String)Session["acao"] != "Categorias/Create")
+                return RedirectToAction("Index");
             if (ModelState.IsValid)
             {
                 db.Categorias.Add(categorias);
@@ -55,6 +59,8 @@ namespace ProjFinalEcho1.Controllers
             {
                 return HttpNotFound();
             }
+            Session["IdPost"] = id;
+            Session["acao"] = "Categorias/Edit";
             return View(categorias);
         }
 
@@ -65,6 +71,8 @@ namespace ProjFinalEcho1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Nome")] Categorias categorias)
         {
+            if ((int)Session["IdPost"] != categorias.ID || (String)Session["acao"] != "Categorias/Edit")
+                return RedirectToAction("Index");
             if (ModelState.IsValid)
             {
                 db.Entry(categorias).State = EntityState.Modified;
@@ -86,6 +94,8 @@ namespace ProjFinalEcho1.Controllers
             {
                 return HttpNotFound();
             }
+            Session["IdPost"] = id;
+            Session["acao"] = "Categorias/Delete";
             return View(categorias);
         }
 
@@ -94,6 +104,8 @@ namespace ProjFinalEcho1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if ((int)Session["IdPost"] != id || (String)Session["acao"] != "Categorias/Delete")
+                return RedirectToAction("Index");
             Categorias categorias = db.Categorias.Find(id);
             db.Categorias.Remove(categorias);
             db.SaveChanges();

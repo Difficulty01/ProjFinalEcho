@@ -250,7 +250,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Posts\Create.cshtml" />
     <Content Include="Views\Posts\Delete.cshtml" />
     <Content Include="Views\Posts\Details.cshtml" />
     <Content Include="Views\Posts\Edit.cshtml" />
@@ -262,6 +261,8 @@
     <Content Include="Views\Posts\Search.cshtml" />
     <Content Include="Views\Posts\Votes.cshtml" />
     <Content Include="Views\Posts\VotesDelete.cshtml" />
+    <Content Include="Views\Posts\NewComentario.cshtml" />
+    <Content Include="Views\Posts\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,10 +19,14 @@ namespace ProjFinalEcho1.Controllers
         public ActionResult Index()
         {
             ViewBag.categorias = db.Categorias.ToList();
-            return View(db.Posts.Where(p => p.Hidden != true).ToList());
+            if (User.IsInRole("administrador"))
+                return View(db.Posts.ToList());
+            else
+                return View(db.Posts.Where(p => p.Hidden != true).ToList());
         }
 
         // GET: Posts/Votes/5
+        [Authorize]
         public ActionResult Votes(int? id)
         {
             if (id == null)
@@ -31,15 +35,16 @@ namespace ProjFinalEcho1.Controllers
             }
             else
             {
-                string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                var dados = db.Utilizadores.Where(u => u.Email == userName).Select(column => column.ID);
-                var limitedProductQuery = dados.Take(1);
-                String idfinal = limitedProductQuery.ToString();
+                string userName = User.Identity.Name;
+                var dados = db.Utilizadores.Where(u => u.Email == userName);
+                int idFinal = -1;
+                foreach (var Item in dados)
+                    idFinal = Item.ID;
 
                 Votes votes = new Votes
                 {
                     PostId = (int)id,
-                    UtilizadorFK = Int32.Parse(idfinal)
+                    UtilizadorFK = idFinal
                 };
                 db.Votes.Add(votes);
                 try
@@ -57,6 +62,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Posts/Votes/5
+        [Authorize]
         public ActionResult VotesDelete(int? id)
         {
             if (id == null)
@@ -100,6 +106,9 @@ namespace ProjFinalEcho1.Controllers
             {
                 return RedirectToAction("Index");
             }
+            if (User.IsInRole("administrador"))
+            { ViewBag.Posts = db.Posts.Where(c => c.CategoriasId == id).ToList(); }
+            else
             ViewBag.Posts = db.Posts.Where(c => c.CategoriasId == id).Where(p => p.Hidden != true).ToList();
             ViewBag.categorias = db.Categorias.ToList();
             return View();
@@ -117,6 +126,9 @@ namespace ProjFinalEcho1.Controllers
             {
                 return HttpNotFound();
             }
+
+
+
             ViewBag.comments = db.Comentarios.Where(c => c.PostId == id).ToList();
             string a = "👍 "+ db.Votes.Where(c => c.PostId == id).ToList().Count;
             ViewBag.likes = a;
@@ -251,14 +263,21 @@ namespace ProjFinalEcho1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "administrador")]
-        public ActionResult Edit([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts)
+        public ActionResult Edit([Bind(Include = "ID,CategoriasId,Imagem,Titulo,Conteudo,Hidden,Deleted")] Posts posts)
         {
             //uttilizador mal intencionado
             if((int)Session["IdPost"] != posts.ID || (String)Session["acao"] != "Posts/Edit")
                 return RedirectToAction("Index");
             if (ModelState.IsValid)
             {
+                string userName = User.Identity.Name;
+                var dados = db.Utilizadores.Where(u => u.Email == userName);
+                int idFinal = -1;
+                foreach (var Item in dados)
+                    idFinal = Item.ID;
+                posts.UtilizadorId = idFinal;
                 db.Entry(posts).State = EntityState.Modified;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -295,6 +314,45 @@ namespace ProjFinalEcho1.Controllers
             db.Posts.Remove(posts);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Categorias/Create
+        public ActionResult NewComentario(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            Session["IdPost"] = id;
+            Session["acao"] = "Posts/Create";
+            return View();
+        }
+
+        // POST: Categorias/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult NewComentario([Bind(Include = "ID,PostId")] Comentarios comentarios)
+        {
+            if ((String)Session["acao"] != "Posts/Create" || (int)Session["IdPost"] == comentarios.PostId)
+                return RedirectToAction("Index");
+            DateTime value = new DateTime();
+            comentarios.DataDoComentario = value;
+            string userName = User.Identity.Name;
+            var dados = db.Utilizadores.Where(u => u.Email == userName);
+            int idFinal = -1;
+            foreach (var Item in dados)
+                idFinal = Item.ID;
+            comentarios.UtilizadorId = idFinal;
+            if (ModelState.IsValid)
+            {
+                db.Comentarios.Add(comentarios);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Details", new { id = id });
         }
 
         protected override void Dispose(bool disposing)

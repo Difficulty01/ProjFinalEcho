@@ -44,18 +44,20 @@
         {
             @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) 
          }
+            
 @Html.ActionLink("Voltar", "Index")
     </p>
     <table class="pure-table pure-table-bordered">
+        @Html.ActionLink("Novo Comentário", "NewComentario", new { id = Model.ID })
         @foreach (var coments in ViewBag.comments)
         {
-         <tr>
+            <tr>
                 <td></td>
                 <td>@coments.DataDoComentario</td>
                 <td>@coments.Coment</td>
-        </tr>
+            </tr>
         }
-       
+
 
     </table>
 </body>
