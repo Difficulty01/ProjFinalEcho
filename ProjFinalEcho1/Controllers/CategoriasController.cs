@@ -10,7 +10,7 @@ using ProjFinalEcho1.Models;
 
 namespace ProjFinalEcho1.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    //[Authorize(Roles = "Administrador")]
     public class CategoriasController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
