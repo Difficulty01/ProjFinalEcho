@@ -10,7 +10,7 @@ using ProjFinalEcho1.Models;
 
 namespace ProjFinalEcho1.Controllers
 {
-    //[Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador")]
     public class CategoriasController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -19,22 +19,7 @@ namespace ProjFinalEcho1.Controllers
         {
             return View(db.Categorias.ToList());
         }
-
-        // GET: Categorias/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Categorias categorias = db.Categorias.Find(id);
-            if (categorias == null)
-            {
-                return HttpNotFound();
-            }
-            return View(categorias);
-        }
-
+        
         // GET: Categorias/Create
         public ActionResult Create()
         {
