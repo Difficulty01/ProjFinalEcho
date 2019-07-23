@@ -29,12 +29,12 @@ namespace ProjFinalEcho1
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
             // criar a Role 'GestorMultas'
-            if (!roleManager.RoleExists("Administrador"))
+            if (!roleManager.RoleExists("administrador"))
             {
                 // não existe a 'role'
                 // então, criar essa role
                 var role = new IdentityRole();
-                role.Name = "Administrador";
+                role.Name = "administrador";
                 roleManager.Create(role);
             }
 
@@ -51,7 +51,7 @@ namespace ProjFinalEcho1
             //Adicionar o Utilizador à respetiva Role-Administrador
             if (chkUser.Succeeded)
             {
-                var result1 = userManager.AddToRole(user.Id, "Administrador");
+                var result1 = userManager.AddToRole(user.Id, "administrador");
             }
 
             // criar um utilizador 'Administrador'
@@ -65,7 +65,7 @@ namespace ProjFinalEcho1
             //Adicionar o Utilizador à respetiva Role-Administrador
             if (chkUser2.Succeeded)
             {
-                var result1 = userManager.AddToRole(user2.Id, "Administrador");
+                var result1 = userManager.AddToRole(user2.Id, "administrador");
             }
 
             var user3 = new ApplicationUser();

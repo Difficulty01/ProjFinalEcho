@@ -33,7 +33,7 @@
                 @Html.DisplayNameFor(model => model.Titulo)
             </th>
 
-            @if (User.IsInRole("Administrador"))
+            @if (User.IsInRole("administrador"))
             {
                 <th>
                     @Html.DisplayNameFor(model => model.Hidden)
@@ -49,7 +49,7 @@
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
 
-            @if (User.IsInRole("Administrador"))
+            @if (User.IsInRole("administrador"))
             {
                 <td>
                     @Html.DisplayFor(modelItem => item.Hidden)
@@ -65,15 +65,15 @@
                     @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
                 </td>
                 <td>
-                    @if (User.IsInRole("Administrador"))
+                    @if (User.IsInRole("administrador"))
                     {
-                        Html.ActionLink("Editar", "Edit", new { id = item.ID });
+                        @Html.ActionLink("Editar", "Edit", new { id = item.ID });
                     }
-                    @Html.ActionLink("Detalhes", "Details", new { id = item.ID }) 
+                    @Html.ActionLink("Detalhes", "Details", new { id = item.ID })
 
-                    @if (User.IsInRole("Administrador"))
+                    @if (User.IsInRole("administrador"))
                     {
-                        Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
                     }
                 </td>
             </tr>

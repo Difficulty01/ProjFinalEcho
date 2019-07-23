@@ -116,6 +116,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize(Roles = "administrador")]
         public ActionResult Create()
         {
             return View();
@@ -126,7 +127,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "administrador")]
         public ActionResult Create([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts, HttpPostedFileBase Imagem)
         {
 
@@ -214,7 +215,7 @@ namespace ProjFinalEcho1.Controllers
         //}
 
         // GET: Posts/Edit/5
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "administrador")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -234,7 +235,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "administrador")]
         public ActionResult Edit([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts)
         {
             if (ModelState.IsValid)
@@ -247,7 +248,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Posts/Delete/5
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "administrador")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -265,7 +266,7 @@ namespace ProjFinalEcho1.Controllers
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "administrador")]
         public ActionResult DeleteConfirmed(int id)
         {
             Posts posts = db.Posts.Find(id);

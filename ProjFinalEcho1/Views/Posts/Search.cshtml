@@ -32,23 +32,35 @@
 
         @foreach (var item in ViewBag.Posts)
         {
-            <tr>
-                <td>
-                    @item.Titulo
-                </td>
-                <td>
-                    @item.Hidden
-                </td>
-                <td>
-                    @* Apresentar a imagem de um post *@
-                    <img src="~/Imagens/@item.Imagem"
-                         alt="imagem do agente @item.Titulo"
-                         title="@item.Titulo"
-                         width="50" />
+        <tr>
+            <td>
+                @item.Titulo
+            </td>
+            <td>
+                @item.Hidden
+            </td>
+            <td>
+                @* Apresentar a imagem de um post *@
+                <img src="~/Imagens/@item.Imagem"
+                     alt="imagem do agente @item.Titulo"
+                     title="@item.Titulo"
+                     width="50" />
 
-                    @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
-                </td>
-            </tr>
+                @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
+            </td>
+            <td>
+                @if (User.IsInRole("administrador"))
+                {
+                    @Html.ActionLink("Editar", "Edit", new { id = item.ID });
+                }
+                @Html.ActionLink("Detalhes", "Details", new { id = item.ID })
+
+                @if (User.IsInRole("administrador"))
+                {
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
+                }
+            </td>
+        </tr>
         }
 
     </table>
