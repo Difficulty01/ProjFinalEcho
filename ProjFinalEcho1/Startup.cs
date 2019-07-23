@@ -70,16 +70,10 @@ namespace ProjFinalEcho1
 
             var user3 = new ApplicationUser();
 
-            user3.UserName = "admin2@admin.admin";
-            user3.Email = "admin2@admin.admin";
+            user3.UserName = "User@User.User";
+            user3.Email = "User@User.User";
             string userPWD3 = "123456Aa_";
             var chkUser3 = userManager.Create(user, userPWD);
-
-            //Adicionar o Utilizador à respetiva Role-Administrador
-            if (chkUser3.Succeeded)
-            {
-                var result1 = userManager.AddToRole(user3.Id, "Administrador");
-            }
 
         }
 

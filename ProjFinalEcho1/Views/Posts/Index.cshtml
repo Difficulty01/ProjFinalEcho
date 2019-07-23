@@ -32,21 +32,29 @@
             <th>
                 @Html.DisplayNameFor(model => model.Titulo)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hidden)
-            </th>
-            <th></th>
-        </tr>
+
+            @if (User.IsInRole("Administrador"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.Hidden)
+                </th>
+            }
+                <th></th>
+            </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Titulo)
-                </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+
+            @if (User.IsInRole("Administrador"))
+            {
                 <td>
                     @Html.DisplayFor(modelItem => item.Hidden)
                 </td>
+            }
                 <td>
                     @* Apresentar a imagem de um post *@
                     <img src="~/Imagens/@item.Imagem"
@@ -57,9 +65,16 @@
                     @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        Html.ActionLink("Editar", "Edit", new { id = item.ID });
+                    }
+                    @Html.ActionLink("Detalhes", "Details", new { id = item.ID }) 
+
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
+                    }
                 </td>
             </tr>
         }

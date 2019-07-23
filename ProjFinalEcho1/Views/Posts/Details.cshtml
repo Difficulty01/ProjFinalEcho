@@ -31,19 +31,28 @@
                 @Html.DisplayFor(model => model.Conteudo)
             </dd>
 
+
+            <dd>
+                @Html.ActionLink((String)ViewBag.likes, "Votes", new { id = Model.ID })
+                <!--@Html.ActionLink((String)ViewBag.likes, "VotesDelete", new { id = Model.ID }) -->
+            </dd>
+
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-        @Html.ActionLink("Back to List", "Index")
+        @if (User.IsInRole("Administrador"))
+        {
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) 
+         }
+@Html.ActionLink("Voltar", "Index")
     </p>
     <table class="pure-table pure-table-bordered">
         @foreach (var coments in ViewBag.comments)
         {
          <tr>
-                <td>@coments.Coment</td>
-                <td>@coments.DataDoComentario</td>
                 <td></td>
+                <td>@coments.DataDoComentario</td>
+                <td>@coments.Coment</td>
         </tr>
         }
        

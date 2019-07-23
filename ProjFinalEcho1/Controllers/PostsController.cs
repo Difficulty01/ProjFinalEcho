@@ -22,6 +22,69 @@ namespace ProjFinalEcho1.Controllers
             return View(db.Posts.Where(p => p.Hidden != true).ToList());
         }
 
+        // GET: Posts/Votes/5
+        public ActionResult Votes(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+
+                Votes votes = new Votes
+                {
+                    PostId = (int)id
+                };
+                db.Votes.Add(votes);
+                try
+                {
+                    // guardar os dados na BD
+                    db.SaveChanges();
+                    return RedirectToAction("Details", new { id = id });
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Details", new { id  = id});
+                }
+                
+            }
+        }
+
+        // GET: Posts/Votes/5
+        public ActionResult VotesDelete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+
+                Votes votes = new Votes
+                {
+                    PostId = (int)id
+                };
+                var a = db.Votes.FirstOrDefault(v => v.PostId == id);
+                if (a != null)
+                {
+                    db.Votes.Remove(a);
+                    try
+                    {
+                        // guardar os dados na BD
+                        db.SaveChanges();
+                        return RedirectToAction("Details", new { id = id });
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction("Details", new { id = id });
+                    }
+                }
+                else
+                    return RedirectToAction("Details", new { id = id });
+            }
+        }
+
         // GET: Posts/Search/5
         public ActionResult Search(int? id)
         {
@@ -39,7 +102,7 @@ namespace ProjFinalEcho1.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Posts posts = db.Posts.Find(id);
             if (posts == null)
@@ -47,6 +110,8 @@ namespace ProjFinalEcho1.Controllers
                 return HttpNotFound();
             }
             ViewBag.comments = db.Comentarios.Where(c => c.PostId == id).ToList();
+            string a = "👍 "+ db.Votes.Where(c => c.PostId == id).ToList().Count;
+            ViewBag.likes = a;
             return View(posts);
         }
 
@@ -61,6 +126,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public ActionResult Create([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts, HttpPostedFileBase Imagem)
         {
 
@@ -145,9 +211,10 @@ namespace ProjFinalEcho1.Controllers
          }
 
          return View(posts);*/
-    //}
+        //}
 
         // GET: Posts/Edit/5
+        [Authorize(Roles = "Administrador")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -167,6 +234,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public ActionResult Edit([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts)
         {
             if (ModelState.IsValid)
@@ -179,6 +247,7 @@ namespace ProjFinalEcho1.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize(Roles = "Administrador")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -196,6 +265,7 @@ namespace ProjFinalEcho1.Controllers
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public ActionResult DeleteConfirmed(int id)
         {
             Posts posts = db.Posts.Find(id);

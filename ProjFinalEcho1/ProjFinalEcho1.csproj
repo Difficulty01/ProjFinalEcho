@@ -265,6 +265,8 @@
     <Content Include="Views\Categorias\Edit.cshtml" />
     <Content Include="Views\Categorias\Index.cshtml" />
     <Content Include="Views\Posts\Search.cshtml" />
+    <Content Include="Views\Posts\Votes.cshtml" />
+    <Content Include="Views\Posts\VotesDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
