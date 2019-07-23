@@ -21,7 +21,7 @@ namespace ProjFinalEcho1.Controllers
         public AccountController()
         {
         }
-
+        private ApplicationDbContext db = new ApplicationDbContext();
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
             UserManager = userManager;
@@ -372,6 +372,11 @@ namespace ProjFinalEcho1.Controllers
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
+
+                    Utilizadores u = new Utilizadores();
+                    u.Email = model.Email;
+                    db.Utilizadores.Add(u);
+                    db.SaveChanges();
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -380,6 +385,8 @@ namespace ProjFinalEcho1.Controllers
                 }
                 AddErrors(result);
             }
+
+
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
