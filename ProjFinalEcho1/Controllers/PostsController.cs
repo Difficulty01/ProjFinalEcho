@@ -19,7 +19,7 @@ namespace ProjFinalEcho1.Controllers
         public ActionResult Index()
         {
             ViewBag.categorias = db.Categorias.ToList();
-            return View(db.Posts.ToList());
+            return View(db.Posts.Where(p => p.Hidden != true).ToList());
         }
 
         // GET: Posts/Search/5
@@ -29,7 +29,7 @@ namespace ProjFinalEcho1.Controllers
             {
                 return RedirectToAction("Index");
             }
-            ViewBag.Posts = db.Posts.Where(c => c.CategoriasId == id).ToList();
+            ViewBag.Posts = db.Posts.Where(c => c.CategoriasId == id).Where(p => p.Hidden != true).ToList();
             ViewBag.categorias = db.Categorias.ToList();
             return View();
         }

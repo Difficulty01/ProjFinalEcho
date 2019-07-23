@@ -10,7 +10,7 @@ using ProjFinalEcho1.Models;
 
 namespace ProjFinalEcho1.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Administrador")]
     public class CategoriasController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -46,7 +46,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Nome,Descricao")] Categorias categorias)
+        public ActionResult Create([Bind(Include = "ID,Nome")] Categorias categorias)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace ProjFinalEcho1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Nome,Descricao")] Categorias categorias)
+        public ActionResult Edit([Bind(Include = "ID,Nome")] Categorias categorias)
         {
             if (ModelState.IsValid)
             {
