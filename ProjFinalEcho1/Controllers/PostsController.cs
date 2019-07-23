@@ -71,15 +71,16 @@ namespace ProjFinalEcho1.Controllers
             }
             else
             {
-                string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                var dados = db.Utilizadores.Where(u => u.Email == userName).Select(column => column.ID);
-                var limitedProductQuery = dados.Take(1);
-                String idfinal = limitedProductQuery.ToString();
+                string userName = User.Identity.Name;
+                var dados = db.Utilizadores.Where(u => u.Email == userName);
+                int idFinal = -1;
+                foreach (var Item in dados)
+                    idFinal = Item.ID;
                 Votes votes = new Votes
                 {
                     PostId = (int)id
                 };
-                var a = db.Votes.Where(c => c.UtilizadorFK == Int32.Parse(idfinal)).FirstOrDefault(v => v.PostId == id);
+                var a = db.Votes.Where(c => c.UtilizadorFK == idFinal).FirstOrDefault(v => v.PostId == id);
                 if (a != null)
                 {
                     db.Votes.Remove(a);
@@ -126,11 +127,24 @@ namespace ProjFinalEcho1.Controllers
             {
                 return HttpNotFound();
             }
-
-
-
+            string userName = User.Identity.Name;
+            var dados = db.Utilizadores.Where(u => u.Email == userName);
+            int idFinal = -1;
+            foreach (var Item in dados)
+                idFinal = Item.ID;
+            var b = db.Votes.Where(c => c.PostId == id).Where(o => o.UtilizadorFK == idFinal).ToList();
+            string a = "";
+            if (b.Count == 0)
+            {
+                ViewBag.aux = true;
+                 a = "☺️ " + db.Votes.Where(c => c.PostId == id).ToList().Count;
+            }
+            else
+            {
+                ViewBag.aux = false;
+                 a = "👍 " + db.Votes.Where(c => c.PostId == id).ToList().Count;
+            }
             ViewBag.comments = db.Comentarios.Where(c => c.PostId == id).ToList();
-            string a = "👍 "+ db.Votes.Where(c => c.PostId == id).ToList().Count;
             ViewBag.likes = a;
             return View(posts);
         }
@@ -141,6 +155,7 @@ namespace ProjFinalEcho1.Controllers
         {
             Session["IdPost"] = -1;
             Session["acao"] = "Posts/Create";
+            ViewBag.categorias = db.Categorias.ToList();
             return View();
         }
 
@@ -263,12 +278,12 @@ namespace ProjFinalEcho1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "administrador")]
-        public ActionResult Edit([Bind(Include = "ID,CategoriasId,Imagem,Titulo,Conteudo,Hidden,Deleted")] Posts posts)
+        public ActionResult Edit([Bind(Include = "ID,CategoriasId,Imagem,Titulo,Conteudo,Hidden,Deleted,CategoriasId")] Posts posts, HttpPostedFileBase Imagem)
         {
             //uttilizador mal intencionado
             if((int)Session["IdPost"] != posts.ID || (String)Session["acao"] != "Posts/Edit")
                 return RedirectToAction("Index");
-            if (ModelState.IsValid)
+            /*if (ModelState.IsValid)
             {
                 string userName = User.Identity.Name;
                 var dados = db.Utilizadores.Where(u => u.Email == userName);
@@ -281,7 +296,76 @@ namespace ProjFinalEcho1.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(posts);
+            return View(posts);*/
+            // vars auxiliares
+            string caminho = "";
+            bool imagemValida = false;
+
+            /// foi fornecido um ficheiro?
+            if (Imagem == null)
+            {
+                // a foto não existe
+                // vou atribuir uma fotografia por defeito
+                posts.Imagem = "nouser.jpg";
+            }
+            else
+            {
+                // existe ficheiro
+                /// é uma imagem (fotografia)?
+                // aceitamos JPEG e PNG
+                if (Imagem.ContentType == "image/jpeg" ||
+                   Imagem.ContentType == "image/png")
+                {
+                    // estamos perante uma Foto válida
+                    /// se é fotografia, 
+                    ///     guardar a imagem e 
+                    ///       - definir um nome
+                    Guid g;
+                    g = Guid.NewGuid();
+                    string extensaoDoFicheiro = Path.
+                                                GetExtension(Imagem.FileName).
+                                                ToLower();
+                    string nomeFicheiro = g.ToString() + extensaoDoFicheiro;
+
+                    ///       - definir um local onde a guardar
+                    caminho = Path.Combine(Server.MapPath("~/Imagens/"), nomeFicheiro);
+
+                    ///     associar ao agente
+                    posts.Imagem = nomeFicheiro;
+
+                    // marca o ficheiro como válido
+                    imagemValida = true;
+                }
+                else
+                {
+                    /// se não é um ficheiro do tipo imagem (JPEG ou PNG), 
+                    ///     atribuir ao agente uma 'imagem por defeito'
+                    posts.Imagem = "nouser.jpg";
+                }
+            }
+
+            // avalia se os dados fornecidos estão de acordo com o modelo
+            if (ModelState.IsValid)
+            {
+                // adicionar os dados do novo Agente ao Modelo
+                db.Posts.Add(posts);
+                try
+                {
+                    // guardar os dados na BD
+                    db.SaveChanges();
+                    // guardar a imagem no disco rígido do servidor
+                    if (imagemValida) Imagem.SaveAs(caminho);
+                    // redirecionar o utilizador para a página de INDEX
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Ocorreu um erro desconhecido. " +
+                                                 "Pedimos deculpa pela ocorrência.");
+                }
+            }
+            // se cheguei aqui é pq alguma coisa correu mal...
+            return View("index");
         }
 
         // GET: Posts/Delete/5
@@ -352,7 +436,7 @@ namespace ProjFinalEcho1.Controllers
                 return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Details", new { id = comentarios.ID });
         }
 
         protected override void Dispose(bool disposing)

@@ -4,23 +4,51 @@
     ViewBag.Title = "Search";
 }
 
-<h2>Search</h2>
+<style>
+    .sidenav {
+        height: 100%; /* Full-height: remove this if you want "auto" height */
+        width: 160px; /* Set the width of the sidebar */
+        position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+        z-index: 1; /* Stay on top */
+        top: 0; /* Stay at the top */
+        left: 0;
+        background-color: #343434;
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 20px;
+    }
 
+        /* The navigation menu links */
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+        }
+
+            /* When you mouse over the navigation links, change their color */
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+
+    /* Style page content */
+    .main {
+        margin-left: 160px; /* Same as the width of the sidebar */
+        padding: 0px 10px;
+    }
+</style>
 <div>
-    <h4>Posts</h4>
-    <table>
+    <div class="sidenav">
+        <a href="#"><br /></a>
         @foreach (var item in ViewBag.categorias)
         {
-            <tr>
-                <td>
-                    @Html.ActionLink((String)item.Nome, "Search", new { id = item.ID })
-                </td>
-            </tr>
+            @Html.ActionLink((String)item.Nome, "Search", new { id = item.ID })
         }
-        </table>
-    <hr />
-    <table class="table">
-        <tr>
+    </div><div class="main">
+    <h2>Search</h2>
+    <h4>Posts</h4>
+    <table class="pure-table pure-table-bordered" style="background-color:burlywood">
+        <tr style="color:crimson">
             <th>
                 @Html.DisplayNameFor(model => model.Titulo)
             </th>
@@ -32,36 +60,37 @@
 
         @foreach (var item in ViewBag.Posts)
         {
-        <tr>
-            <td>
-                @item.Titulo
-            </td>
-            <td>
-                @item.Hidden
-            </td>
-            <td>
-                @* Apresentar a imagem de um post *@
-                <img src="~/Imagens/@item.Imagem"
-                     alt="imagem do agente @item.Titulo"
-                     title="@item.Titulo"
-                     width="50" />
+            <tr>
+                <td>
+                    @item.Titulo
+                </td>
+                <td>
+                    @item.Hidden
+                </td>
+                <td>
+                    @* Apresentar a imagem de um post *@
+                    <img src="~/Imagens/@item.Imagem"
+                         alt="imagem do agente @item.Titulo"
+                         title="@item.Titulo"
+                         width="50" />
 
-                @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
-            </td>
-            <td>
-                @if (User.IsInRole("administrador"))
-                {
-                    @Html.ActionLink("Editar", "Edit", new { id = item.ID });
-                }
-                @Html.ActionLink("Detalhes", "Details", new { id = item.ID })
+                    @*@Html.DisplayFor(modelItem => agente.Fotografia)*@
+                </td>
+                <td>
+                    @if (User.IsInRole("administrador"))
+                    {
+                        @Html.ActionLink("Editar", "Edit", new { id = item.ID });
+                    }
+                    @Html.ActionLink("Detalhes", "Details", new { id = item.ID })
 
-                @if (User.IsInRole("administrador"))
-                {
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
-                }
-            </td>
-        </tr>
+                    @if (User.IsInRole("administrador"))
+                    {
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.ID });
+                    }
+                </td>
+            </tr>
         }
 
     </table>
+</div>
 </div>

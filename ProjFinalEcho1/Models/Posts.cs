@@ -24,7 +24,7 @@ namespace ProjFinalEcho1.Models
         public string Titulo { get; set; }
         [Required(ErrorMessage = "o Conteudo é de preenchimento obrigatório.")]
         public string Conteudo { get; set; }
-        [Required(ErrorMessage = "A imagem é de preenchimento obrigatório.")]
+        //[Required(ErrorMessage = "A imagem é de preenchimento obrigatório.")]
         public string Imagem { get; set; }
         public Boolean Hidden { get; set; }
 

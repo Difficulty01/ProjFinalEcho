@@ -33,8 +33,14 @@
 
 
             <dd>
-                @Html.ActionLink((String)ViewBag.likes, "Votes", new { id = Model.ID })
-                <!--@Html.ActionLink((String)ViewBag.likes, "VotesDelete", new { id = Model.ID }) -->
+                @if (ViewBag.aux == true)
+                {
+                    @Html.ActionLink((String)ViewBag.likes, "Votes", new { id = Model.ID })
+                }
+                @if (ViewBag.aux == false)
+                {
+                    @Html.ActionLink((String)ViewBag.likes, "VotesDelete", new { id = Model.ID })
+                }
             </dd>
 
         </dl>
