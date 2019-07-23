@@ -60,7 +60,7 @@ namespace ProjFinalEcho1
             user2.UserName = "admin1@admin.admin";
             user2.Email = "admin1@admin.admin";
             string userPWD2 = "123456Aa_";
-            var chkUser2 = userManager.Create(user, userPWD);
+            var chkUser2 = userManager.Create(user2, userPWD);
 
             //Adicionar o Utilizador à respetiva Role-Administrador
             if (chkUser2.Succeeded)
@@ -73,7 +73,7 @@ namespace ProjFinalEcho1
             user3.UserName = "User@User.User";
             user3.Email = "User@User.User";
             string userPWD3 = "123456Aa_";
-            var chkUser3 = userManager.Create(user, userPWD);
+            var chkUser3 = userManager.Create(user3, userPWD);
 
         }
 

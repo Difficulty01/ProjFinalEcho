@@ -11,9 +11,9 @@ namespace ProjFinalEcho1.Models
     {
         public int ID { get; set; }
 
-        /*[ForeignKey("Utilizadores")]
-        public int utilizadoresFK { get; set; }
-        public Utilizadores id { get; set; }*/
+        [ForeignKey("Utilizador")]
+        public int UtilizadorFK { get; set; }
+        public Utilizadores Utilizador { get; set; }
 
         [ForeignKey("Post")]
         public int PostId { get; set; }

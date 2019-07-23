@@ -15,9 +15,9 @@ namespace ProjFinalEcho1.Models
 
         public DateTime DataDoComentario{ get; set; }
 
-        /*[ForeignKey("Utilizadores")]
-        public int UtilizadoresId { get; set; }
-        public Utilizadores utilizadores { get; set; }*/
+        [ForeignKey("Utilizador")]
+        public int UtilizadorId { get; set; }
+        public Utilizadores Utilizador { get; set; }
 
         [ForeignKey("Post")]
         public int PostId { get; set; }

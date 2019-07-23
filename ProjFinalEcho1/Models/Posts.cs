@@ -29,9 +29,9 @@ namespace ProjFinalEcho1.Models
 
         public Boolean Deleted { get; set; }
 
-        /*[ForeignKey("Utilizadores")]
-        public int UtilizadoresId { get; set; }
-        public Utilizadores utilizadores { get; set; }*/
+        [ForeignKey("Utilizador")]
+        public int UtilizadorId { get; set; }
+        public Utilizadores Utilizador { get; set; }
 
         [ForeignKey("Categorias")]
         public int CategoriasId { get; set; }

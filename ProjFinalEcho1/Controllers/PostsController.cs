@@ -31,10 +31,15 @@ namespace ProjFinalEcho1.Controllers
             }
             else
             {
+                string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                var dados = db.Utilizadores.Where(u => u.Email == userName).Select(column => column.ID);
+                var limitedProductQuery = dados.Take(1);
+                String idfinal = limitedProductQuery.ToString();
 
                 Votes votes = new Votes
                 {
-                    PostId = (int)id
+                    PostId = (int)id,
+                    UtilizadorFK = Int32.Parse(idfinal)
                 };
                 db.Votes.Add(votes);
                 try
@@ -60,12 +65,15 @@ namespace ProjFinalEcho1.Controllers
             }
             else
             {
-
+                string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                var dados = db.Utilizadores.Where(u => u.Email == userName).Select(column => column.ID);
+                var limitedProductQuery = dados.Take(1);
+                String idfinal = limitedProductQuery.ToString();
                 Votes votes = new Votes
                 {
                     PostId = (int)id
                 };
-                var a = db.Votes.FirstOrDefault(v => v.PostId == id);
+                var a = db.Votes.Where(c => c.UtilizadorFK == Int32.Parse(idfinal)).FirstOrDefault(v => v.PostId == id);
                 if (a != null)
                 {
                     db.Votes.Remove(a);
@@ -119,6 +127,8 @@ namespace ProjFinalEcho1.Controllers
         [Authorize(Roles = "administrador")]
         public ActionResult Create()
         {
+            Session["IdPost"] = -1;
+            Session["acao"] = "Posts/Create";
             return View();
         }
 
@@ -130,6 +140,9 @@ namespace ProjFinalEcho1.Controllers
         [Authorize(Roles = "administrador")]
         public ActionResult Create([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts, HttpPostedFileBase Imagem)
         {
+            //utilizador mal intencionado
+            if((String)Session["acao"] != "Posts/Create")
+            return RedirectToAction("Index");
 
             // vars auxiliares
             string caminho = "";
@@ -220,13 +233,15 @@ namespace ProjFinalEcho1.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Posts posts = db.Posts.Find(id);
             if (posts == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index");
             }
+            Session["IdPost"] = id;
+            Session["acao"] = "Posts/Edit";
             return View(posts);
         }
 
@@ -238,6 +253,9 @@ namespace ProjFinalEcho1.Controllers
         [Authorize(Roles = "administrador")]
         public ActionResult Edit([Bind(Include = "ID,Titulo,Conteudo,Hidden,Deleted")] Posts posts)
         {
+            //uttilizador mal intencionado
+            if((int)Session["IdPost"] != posts.ID || (String)Session["acao"] != "Posts/Edit")
+                return RedirectToAction("Index");
             if (ModelState.IsValid)
             {
                 db.Entry(posts).State = EntityState.Modified;
@@ -253,13 +271,15 @@ namespace ProjFinalEcho1.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
             Posts posts = db.Posts.Find(id);
             if (posts == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index");
             }
+            Session["IdPost"] = id;
+            Session["acao"] = "Posts/Delete";
             return View(posts);
         }
 
@@ -269,6 +289,8 @@ namespace ProjFinalEcho1.Controllers
         [Authorize(Roles = "administrador")]
         public ActionResult DeleteConfirmed(int id)
         {
+            if ((int)Session["IdPost"] != id || (String)Session["acao"] != "Posts/Delete")
+                return RedirectToAction("Index");
             Posts posts = db.Posts.Find(id);
             db.Posts.Remove(posts);
             db.SaveChanges();

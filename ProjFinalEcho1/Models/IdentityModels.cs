@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -36,5 +37,17 @@ namespace ProjFinalEcho1.Models
         public virtual DbSet<Categorias> Categorias { get; set; } // tabela Categorias
         
         public virtual DbSet<Utilizadores> Utilizadores { get; set; } // tabela Utilizadores
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+            base.OnModelCreating(modelBuilder);
+        }
+
+
+
+
     }
 }
